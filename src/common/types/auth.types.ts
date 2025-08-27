@@ -7,7 +7,7 @@ export interface AuthResponseDto {
 }
 
 export interface JwtPayload {
-  playerId: number;
+  playerId: string;
   email: string;
   iat?: number;
   exp?: number;

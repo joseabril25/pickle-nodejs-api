@@ -1,12 +1,11 @@
-import { IsString, IsNotEmpty, IsEmail, IsOptional, IsInt, MinLength, MaxLength, Min } from 'class-validator'
+import { IsString, IsNotEmpty, IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator'
 import { Expose, Exclude } from 'class-transformer'
 import { BaseResponseDto } from './base.dto'
 
 export class CreatePlayerDto {
   @IsNotEmpty()
-  @IsInt()
-  @Min(1)
-  game_id!: number
+  @IsString()
+  game_id!: string
 
   @IsNotEmpty()
   @IsString()
@@ -47,7 +46,7 @@ export class UpdatePlayerDto {
 
 export class PlayerResponseDto extends BaseResponseDto {
   @Expose()
-  game_id!: number
+  game_id!: string
 
   @Expose()
   name!: string

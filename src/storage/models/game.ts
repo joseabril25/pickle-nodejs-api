@@ -7,6 +7,13 @@ import Player from './player'
 })
 export default class Game extends Model {
   @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    primaryKey: true,
+  })
+  id!: string
+
+  @Column({
     type: DataType.STRING(255),
     allowNull: false,
   })
