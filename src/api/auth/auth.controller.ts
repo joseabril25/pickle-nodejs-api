@@ -29,7 +29,7 @@ export const registerUser = asyncHandler(
       maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
     });
     
-    ApiResponse.success(res, result.user, "User registered successfully", 201);
+    ApiResponse.success(res, result.player, "User registered successfully", 201);
   }
 );
 
@@ -57,7 +57,7 @@ export const loginUser = asyncHandler(
       maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
     });
     
-    ApiResponse.success(res, result.user, "User logged in successfully");
+    ApiResponse.success(res, result.player, "User logged in successfully");
   }
 );
 

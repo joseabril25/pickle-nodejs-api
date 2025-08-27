@@ -1,7 +1,7 @@
 import { PlayerResponseDto } from './dto/player.dto'
 
 export interface AuthResponseDto {
-  user: PlayerResponseDto;
+  player: PlayerResponseDto;
   accessToken: string;
   refreshToken: string;
 }

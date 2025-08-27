@@ -1,5 +1,6 @@
-import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript'
+import { Table, Column, Model, DataType, BelongsToMany } from 'sequelize-typescript'
 import Player from './player'
+import GamePlayer from './gamePlayer'
 
 @Table({
   tableName: 'games',
@@ -37,6 +38,6 @@ export default class Game extends Model {
   })
   description?: string
 
-  @HasMany(() => Player)
+  @BelongsToMany(() => Player, () => GamePlayer)
   players!: Player[]
 }

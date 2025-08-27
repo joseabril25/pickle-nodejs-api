@@ -15,7 +15,7 @@ export class AuthService {
 
     // Create player (password will be auto-hashed by model hook)
     const player = await Player.create({
-      game_id: playerData.game_id,
+      game_id: playerData.gameId,
       name: playerData.name,
       email: playerData.email,
       password: playerData.password
@@ -28,7 +28,6 @@ export class AuthService {
     // Build PlayerResponseDto
     const playerResponse: PlayerResponseDto = {
       id: player.id,
-      game_id: player.game_id,
       name: player.name,
       email: player.email,
       createdAt: player.createdAt,
@@ -36,7 +35,7 @@ export class AuthService {
     };
 
     return {
-      user: playerResponse,
+      player: playerResponse,
       accessToken,
       refreshToken
     };
@@ -62,7 +61,6 @@ export class AuthService {
     // Build PlayerResponseDto
     const playerResponse: PlayerResponseDto = {
       id: player.id,
-      game_id: player.game_id,
       name: player.name,
       email: player.email,
       createdAt: player.createdAt,
@@ -70,7 +68,7 @@ export class AuthService {
     };
 
     return {
-      user: playerResponse,
+      player: playerResponse,
       accessToken,
       refreshToken
     };
@@ -83,7 +81,7 @@ export class AuthService {
     return;
   }
 
-  async refreshToken(oldRefreshToken: string): Promise<Omit<AuthResponseDto, 'user'>> {
+  async refreshToken(oldRefreshToken: string): Promise<Omit<AuthResponseDto, 'player'>> {
     console.log("🚀 ~ AuthService ~ refreshToken ~ oldRefreshToken:", oldRefreshToken)
     // TODO: Implement proper refresh token logic
     // For now, return new tokens
@@ -104,7 +102,6 @@ export class AuthService {
 
     return {
       id: player.id,
-      game_id: player.game_id,
       name: player.name,
       email: player.email,
       createdAt: player.createdAt,

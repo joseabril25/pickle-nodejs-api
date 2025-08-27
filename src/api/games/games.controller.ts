@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { ApiResponse, asyncHandler } from '../../common/utils'
 import { GamesService } from './games.service'
-import { CreateGameDto, UpdateGameDto, CreatePlayerDto, UpdatePlayerDto } from '../../common/types/dto'
+import { CreateGameDto, UpdateGameDto, UpdatePlayerDto } from '../../common/types/dto'
+import { AddPlayerToGameDto, AddMultiplePlayersDto } from '../../common/types/dto/gamePlayer.dto'
 
 const gamesService = new GamesService()
 
@@ -20,27 +21,53 @@ export const getAllGames = asyncHandler(
 )
 
 export const getGameById = asyncHandler(
-  async (req: Request<{ id: string }>, res: Response) => {
-    const game = await gamesService.getGameById(req.params.id)
+  async (req: Request, res: Response) => {
+    const gameId = req.params.id
+    const game = await gamesService.getGameById(gameId)
     ApiResponse.success(res, game, 'Game retrieved successfully')
   }
 )
 
 export const addPlayerToGame = asyncHandler(
-  async (req: Request<{ id: string }, {}, CreatePlayerDto>, res: Response) => {
-    const playerData = {
-      ...req.body,
-      game_id: req.params.id
-    }
-    const player = await gamesService.addPlayerToGame(playerData)
+  async (req: Request, res: Response) => {
+    const gameId = req.params.id
+    const playerData = req.body as AddPlayerToGameDto
+    const player = await gamesService.addPlayerToGame(gameId, playerData)
     ApiResponse.success(res, player, 'Player added to game successfully', 201)
   }
 )
 
+export const addMultiplePlayersToGame = asyncHandler(
+  async (req: Request, res: Response) => {
+    const gameId = req.params.id
+    const playersData = req.body as AddMultiplePlayersDto
+    const players = await gamesService.addMultiplePlayersToGame(gameId, playersData)
+    ApiResponse.success(res, players, `${players.length} players added to game successfully`, 201)
+  }
+)
+
+export const updateGame = asyncHandler(
+  async (req: Request, res: Response) => {
+    const gameId = req.params.id
+    const updateData = req.body as UpdateGameDto
+    const game = await gamesService.updateGame(gameId, updateData)
+    ApiResponse.success(res, game, 'Game updated successfully')
+  }
+)
+
+export const deleteGame = asyncHandler(
+  async (req: Request, res: Response) => {
+    const gameId = req.params.id
+    await gamesService.deleteGame(gameId)
+    ApiResponse.success(res, null, 'Game deleted successfully')
+  }
+)
+
 export const updatePlayerStatus = asyncHandler(
-  async (req: Request<{ id: string; playerId: string }, {}, UpdatePlayerDto>, res: Response) => {
+  async (req: Request, res: Response) => {
     const { id: gameId, playerId } = req.params
-    const player = await gamesService.updatePlayerStatus(gameId, playerId, req.body)
+    const updateData = req.body as UpdatePlayerDto
+    const player = await gamesService.updatePlayerStatus(gameId, playerId, updateData)
     ApiResponse.success(res, player, 'Player status updated successfully')
   }
 )

@@ -1,6 +1,7 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, BeforeCreate, BeforeUpdate } from 'sequelize-typescript'
+import { Table, Column, Model, DataType, BeforeCreate, BeforeUpdate, BelongsToMany } from 'sequelize-typescript'
 import * as bcrypt from 'bcryptjs'
 import Game from './game'
+import GamePlayer from './gamePlayer'
 
 @Table({
   tableName: 'players',
@@ -13,13 +14,6 @@ export default class Player extends Model {
     primaryKey: true,
   })
   id!: string
-
-  @ForeignKey(() => Game)
-  @Column({
-    type: DataType.UUID,
-    allowNull: false,
-  })
-  game_id!: string
 
   @Column({
     type: DataType.STRING(255),
@@ -43,8 +37,8 @@ export default class Player extends Model {
   })
   password!: string
 
-  @BelongsTo(() => Game)
-  game!: Game
+  @BelongsToMany(() => Game, () => GamePlayer)
+  games!: Game[]
 
   // Hash password before creating or updating
   @BeforeCreate

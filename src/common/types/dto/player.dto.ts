@@ -5,7 +5,7 @@ import { BaseResponseDto } from './base.dto'
 export class CreatePlayerDto {
   @IsNotEmpty()
   @IsString()
-  game_id!: string
+  gameId!: string
 
   @IsNotEmpty()
   @IsString()
@@ -45,9 +45,6 @@ export class UpdatePlayerDto {
 }
 
 export class PlayerResponseDto extends BaseResponseDto {
-  @Expose()
-  game_id!: string
-
   @Expose()
   name!: string
 
