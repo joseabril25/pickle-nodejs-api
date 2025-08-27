@@ -1,13 +1,15 @@
 import express from 'express';
 import cors from 'cors';
-// import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import { errorHandler } from './common/middlewares/error.middleware';
 // import compression from 'compression';
 
 
 const app = express();
 
 // Security middleware
-// app.use(helmet());
+app.use(helmet());
 app.use(cors({
   origin: (origin, callback) => {
     // Get allowed origins from environment variable or use default
@@ -38,8 +40,9 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
-// app.use(cookieParser());
+
 // app.use(compression());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -61,5 +64,6 @@ app.get('/', (_req, res) => {
 });
 
 // Error handler goes here
+app.use(errorHandler);
 
 export default app;
