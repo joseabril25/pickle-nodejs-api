@@ -1,11 +1,11 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript'
-import { Player } from './player'
+import Player from './player'
 
 @Table({
   tableName: 'games',
   timestamps: true,
 })
-export class Game extends Model {
+export default class Game extends Model {
   @Column({
     type: DataType.STRING(255),
     allowNull: false,

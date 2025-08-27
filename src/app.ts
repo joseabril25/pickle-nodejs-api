@@ -12,9 +12,7 @@ app.use(cors({
   origin: (origin, callback) => {
     // Get allowed origins from environment variable or use default
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || [
-      'http://localhost:3000',
       'http://localhost:3001',
-      'https://checkpoint-react-fe.vercel.app'
     ];
 
     console.log('CORS - Incoming origin:', origin);

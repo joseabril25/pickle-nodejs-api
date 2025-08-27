@@ -1,2 +1,4 @@
-export { Game } from './game'
-export { Player } from './player'
+import Game from './game'
+import Player from './player'
+
+export { Game, Player }

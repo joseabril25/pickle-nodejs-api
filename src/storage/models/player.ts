@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript'
-import { Game } from './game'
+import Game from './game'
 
 
 
@@ -7,7 +7,7 @@ import { Game } from './game'
   tableName: 'players',
   timestamps: true,
 })
-export class Player extends Model {
+export default class Player extends Model {
   @ForeignKey(() => Game)
   @Column({
     type: DataType.INTEGER,
