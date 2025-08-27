@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import logger from '../common/utils/logger'
 import Game from './models/game'
 import Player from './models/player'
+import { GamePlayer } from './models'
 
 dotenv.config()
 
@@ -14,7 +15,7 @@ const sequelize = new Sequelize({
   port: parseInt(process.env.DB_PORT || '5432'),
   dialect: 'postgres',
   logging: process.env.NODE_ENV === 'development' ? (sql: string) => logger.info(sql) : false,
-  models: [Game, Player], // Explicitly add models here
+  models: [Game, Player, GamePlayer], // Order matters for foreign keys
   define: {
     timestamps: true,
     underscored: true,
@@ -26,9 +27,9 @@ export const connectDatabase = async (): Promise<void> => {
     await sequelize.authenticate()
     logger.info('✅ Database connection established successfully.')
 
-    // Only sync in development
+    // Only sync in development with force option to recreate tables
     if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true })
+      await sequelize.sync({ force: true }) // This will drop and recreate all tables
       logger.info('✅ Database models synchronized.')
     }
   } catch (error) {

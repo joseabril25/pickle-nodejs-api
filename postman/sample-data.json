@@ -1,0 +1,121 @@
+{
+  "games": [
+    {
+      "title": "Soccer Championship Final",
+      "date": "2025-09-15T18:00:00Z",
+      "location": "Central Stadium", 
+      "description": "Final match of the championship season"
+    },
+    {
+      "title": "Basketball Tournament",
+      "date": "2025-10-20T19:30:00Z",
+      "location": "Sports Complex Arena",
+      "description": "Annual basketball tournament with local teams"
+    },
+    {
+      "title": "Tennis Open",
+      "date": "2025-11-05T14:00:00Z",
+      "location": "Tennis Club Courts",
+      "description": "Open tournament for all skill levels"
+    }
+  ],
+  "players": [
+    {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "password123"
+    },
+    {
+      "name": "Jane Smith", 
+      "email": "jane@example.com",
+      "password": "password456"
+    },
+    {
+      "name": "Alice Johnson",
+      "email": "alice@example.com", 
+      "password": "password789"
+    },
+    {
+      "name": "Bob Wilson",
+      "email": "bob@example.com",
+      "password": "password101"
+    },
+    {
+      "name": "Carol Davis",
+      "email": "carol@example.com",
+      "password": "password112"
+    },
+    {
+      "name": "David Brown",
+      "email": "david@example.com",
+      "password": "password131"
+    },
+    {
+      "name": "Emma White",
+      "email": "emma@example.com",
+      "password": "password415"
+    },
+    {
+      "name": "Frank Green",
+      "email": "frank@example.com",
+      "password": "password161"
+    }
+  ],
+  "multiplePlayersExample": {
+    "players": [
+      {
+        "name": "Alice Johnson",
+        "email": "alice@example.com",
+        "password": "password789"
+      },
+      {
+        "name": "Bob Wilson", 
+        "email": "bob@example.com",
+        "password": "password101"
+      },
+      {
+        "name": "Carol Davis",
+        "email": "carol@example.com", 
+        "password": "password112"
+      }
+    ]
+  },
+  "gameUpdates": {
+    "partialUpdate": {
+      "title": "Updated Game Title",
+      "location": "New Stadium"
+    },
+    "fullUpdate": {
+      "title": "Completely New Game",
+      "date": "2025-12-01T16:00:00Z", 
+      "location": "Updated Arena",
+      "description": "This game has been completely updated"
+    }
+  },
+  "playerStatusUpdates": [
+    {
+      "status": "accepted",
+      "description": "Player accepts the invitation"
+    },
+    {
+      "status": "declined", 
+      "description": "Player declines the invitation"
+    },
+    {
+      "status": "invited",
+      "description": "Reset player back to invited status"
+    }
+  ],
+  "testCredentials": {
+    "adminUser": {
+      "name": "Admin User",
+      "email": "admin@fonica.com",
+      "password": "admin123456"
+    },
+    "testUser": {
+      "name": "Test User",
+      "email": "test@fonica.com", 
+      "password": "test123456"
+    }
+  }
+}
