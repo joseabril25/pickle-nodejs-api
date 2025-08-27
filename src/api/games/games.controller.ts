@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ApiResponse, asyncHandler } from '../../common/utils'
 import { GamesService } from './games.service'
-import { CreateGameDto, UpdateGameDto, UpdatePlayerDto } from '../../common/types/dto'
-import { AddPlayerToGameDto, AddMultiplePlayersDto } from '../../common/types/dto/gamePlayer.dto'
+import { CreateGameDto, UpdateGameDto } from '../../common/types/dto'
+import { AddPlayerToGameDto, AddMultiplePlayersDto, UpdatePlayerStatusDto } from '../../common/types/dto/gamePlayer.dto'
 
 const gamesService = new GamesService()
 
@@ -14,7 +14,7 @@ export const createGame = asyncHandler(
 )
 
 export const getAllGames = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (_req: Request, res: Response) => {
     const games = await gamesService.getAllGames()
     ApiResponse.success(res, games, 'Games retrieved successfully')
   }
@@ -66,7 +66,7 @@ export const deleteGame = asyncHandler(
 export const updatePlayerStatus = asyncHandler(
   async (req: Request, res: Response) => {
     const { id: gameId, playerId } = req.params
-    const updateData = req.body as UpdatePlayerDto
+    const updateData = req.body as UpdatePlayerStatusDto
     const player = await gamesService.updatePlayerStatus(gameId, playerId, updateData)
     ApiResponse.success(res, player, 'Player status updated successfully')
   }

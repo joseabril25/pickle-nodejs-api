@@ -1,8 +1,8 @@
 import Game from '../../storage/models/game'
 import Player from '../../storage/models/player'
 import GamePlayer from '../../storage/models/gamePlayer'
-import { CreateGameDto, UpdateGameDto, UpdatePlayerDto, GameResponseDto, PlayerResponseDto } from '../../common/types/dto'
-import { AddMultiplePlayersDto, AddPlayerToGameDto } from '../../common/types/dto/gamePlayer.dto'
+import { CreateGameDto, UpdateGameDto, GameResponseDto, PlayerResponseDto } from '../../common/types/dto'
+import { AddMultiplePlayersDto, AddPlayerToGameDto, UpdatePlayerStatusDto } from '../../common/types/dto/gamePlayer.dto'
 import createError from 'http-errors'
 
 export class GamesService {
@@ -28,10 +28,6 @@ export class GamesService {
 
   async getAllGames(): Promise<GameResponseDto[]> {
     const games = await Game.findAll({
-      include: [{
-        model: Player,
-        as: 'players'
-      }],
       order: [['date', 'ASC']]
     })
 
@@ -50,7 +46,10 @@ export class GamesService {
     const game = await Game.findByPk(gameId, {
       include: [{
         model: Player,
-        as: 'players'
+        as: 'players',
+        through: {
+          attributes: ['status']
+        }
       }]
     })
 
@@ -64,6 +63,14 @@ export class GamesService {
       date: game.date,
       location: game.location,
       description: game.description,
+      players: game.players?.map(player => ({
+        id: player.id,
+        name: player.name,
+        email: player.email,
+        status: (player as any).GamePlayer?.status,
+        createdAt: player.createdAt,
+        updatedAt: player.updatedAt
+      })),
       createdAt: game.createdAt,
       updatedAt: game.updatedAt
     }
@@ -71,21 +78,19 @@ export class GamesService {
 
   async addPlayerToGame(gameId: string, playerData: AddPlayerToGameDto): Promise<PlayerResponseDto> {
     // Check if game exists
-    const game = await Game.findByPk(gameId)
+    const game = await Game.findOne({
+      where: {
+        id: gameId
+      }
+    })
     if (!game) {
       throw createError(404, 'Game not found')
     }
 
-    // Check if player already exists globally
-    let player = await Player.findOne({ where: { email: playerData.email } })
-    
+    // Check if player exists
+    const player = await Player.findByPk(playerData.playerId)
     if (!player) {
-      // Create new player if doesn't exist
-      player = await Player.create({
-        name: playerData.name,
-        email: playerData.email,
-        password: playerData.password
-      })
+      throw createError(404, 'Player does not exist')
     }
 
     // Check if player is already in this game
@@ -126,18 +131,14 @@ export class GamesService {
     const results: PlayerResponseDto[] = []
     const errors: string[] = []
 
-    for (const playerData of playersData.players) {
+    for (const playerId of playersData.playerIds) {
       try {
-        // Check if player already exists globally
-        let player = await Player.findOne({ where: { email: playerData.email } })
+        // Check if player exists
+        const player = await Player.findByPk(playerId)
         
         if (!player) {
-          // Create new player if doesn't exist
-          player = await Player.create({
-            name: playerData.name,
-            email: playerData.email,
-            password: playerData.password
-          })
+          errors.push(`Player with ID ${playerId} does not exist`)
+          continue
         }
 
         // Check if player is already in this game
@@ -149,7 +150,7 @@ export class GamesService {
         })
 
         if (existingGamePlayer) {
-          errors.push(`Player with email ${playerData.email} already exists in this game`)
+          errors.push(`Player ${player.name} already exists in this game`)
           continue
         }
 
@@ -168,7 +169,7 @@ export class GamesService {
           updatedAt: player.updatedAt
         })
       } catch (error) {
-        errors.push(`Failed to add player ${playerData.email}: ${error}`)
+        errors.push(`Failed to add player ${playerId}: ${error}`)
       }
     }
 
@@ -219,26 +220,37 @@ export class GamesService {
     await game.destroy()
   }
 
-  async updatePlayerStatus(gameId: string, playerId: string, updateData: UpdatePlayerDto): Promise<PlayerResponseDto> {
+  async updatePlayerStatus(gameId: string, playerId: string, updateData: UpdatePlayerStatusDto): Promise<PlayerResponseDto> {
     // Check if game exists
     const game = await Game.findByPk(gameId)
     if (!game) {
       throw createError(404, 'Game not found')
     }
 
-    // Find and update player
-    const player = await Player.findOne({
+    // Check if player exists
+    const player = await Player.findByPk(playerId)
+    if (!player) {
+      throw createError(404, 'Player not found')
+    }
+
+    // Find and update the game-player relationship
+    const gamePlayer = await GamePlayer.findOne({
       where: {
-        id: playerId,
-        game_id: gameId
+        game_id: gameId,
+        player_id: playerId
       }
     })
 
-    if (!player) {
+    if (!gamePlayer) {
       throw createError(404, 'Player not found in this game')
     }
 
-    await player.update(updateData)
+    // Update the status in the junction table
+    if (updateData.status) {
+      await gamePlayer.update({
+        status: updateData.status
+      })
+    }
 
     return {
       id: player.id,

@@ -1,31 +1,17 @@
-import { IsArray, IsNotEmpty, IsString, IsEmail, ValidateNested, MinLength, MaxLength, IsOptional, IsEnum } from 'class-validator'
-import { Type } from 'class-transformer'
+import { IsArray, IsNotEmpty, IsString, IsOptional, IsEnum } from 'class-validator'
 import { PlayerGameStatus } from '../../../storage/models/gamePlayer'
 
 export class AddPlayerToGameDto {
   @IsNotEmpty()
   @IsString()
-  @MinLength(1)
-  @MaxLength(255)
-  name!: string
-
-  @IsNotEmpty()
-  @IsEmail()
-  @MaxLength(255)
-  email!: string
-
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(6)
-  @MaxLength(255)
-  password!: string
+  playerId!: string
 }
 
 export class AddMultiplePlayersDto {
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => AddPlayerToGameDto)
-  players!: AddPlayerToGameDto[]
+  @IsString({ each: true })
+  @IsNotEmpty({ each: true })
+  playerIds!: string[]
 }
 
 export class UpdatePlayerStatusDto {

@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"gameId\": \"{{game_id}}\",\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/auth/register",
@@ -207,7 +207,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password456\"\n}"
+							"raw": "{\n  \"playerId\": \"{{player_id}}\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/games/{{game_id}}/players",
@@ -232,7 +232,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"players\": [\n    {\n      \"name\": \"Alice Johnson\",\n      \"email\": \"alice@example.com\",\n      \"password\": \"password789\"\n    },\n    {\n      \"name\": \"Bob Wilson\",\n      \"email\": \"bob@example.com\",\n      \"password\": \"password101\"\n    },\n    {\n      \"name\": \"Carol Davis\",\n      \"email\": \"carol@example.com\",\n      \"password\": \"password112\"\n    }\n  ]\n}"
+							"raw": "{\n  \"playerIds\": [\n    \"{{player_id_1}}\",\n    \"{{player_id_2}}\",\n    \"{{player_id_3}}\"\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/games/{{game_id}}/players/multiple",
@@ -274,7 +274,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/",
+					"raw": "{{base_url}}/health",
 					"host": ["{{base_url}}"],
 					"path": ["health"]
 				}
@@ -299,6 +299,21 @@
 		},
 		{
 			"key": "player_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "player_id_1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "player_id_2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "player_id_3",
 			"value": "",
 			"type": "string"
 		}

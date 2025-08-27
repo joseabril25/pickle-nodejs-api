@@ -101,6 +101,7 @@ export const refreshAccessToken = asyncHandler(
 export const getCurrentUser = asyncHandler(
   async (req: Request, res: Response) => {
     const playerId = req.player!.playerId; // AuthGuard ensures req.user exists
+    console.log("🚀 ~ playerId:", playerId)
 
     const user = await authService.getCurrentUser(playerId);
     

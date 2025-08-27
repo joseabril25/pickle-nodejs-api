@@ -5,10 +5,6 @@ import { BaseResponseDto } from './base.dto'
 export class CreatePlayerDto {
   @IsNotEmpty()
   @IsString()
-  gameId!: string
-
-  @IsNotEmpty()
-  @IsString()
   @MinLength(1)
   @MaxLength(255)
   name!: string

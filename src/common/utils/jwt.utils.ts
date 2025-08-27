@@ -38,12 +38,12 @@ export class JwtUtils {
     }
   }
 
-  static generateAccessToken(userId: string, email: string): string {
+  static generateAccessToken(playerId: string, email: string): string {
     const secret = process.env.JWT_SECRET;
     if (!secret) throw new Error('JWT_SECRET is not defined');
     
     return jwt.sign(
-      { userId, email },
+      { playerId, email },
       secret,
       { expiresIn: process.env.JWT_EXPIRE } as SignOptions
     );

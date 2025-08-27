@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { errorHandler } from './common/middlewares/error.middleware';
+import { apiRouter } from './api/api.routes';
 // import compression from 'compression';
 
 
@@ -53,7 +54,7 @@ app.use((req, _res, next) => {
 });
 
 // Routes goes here
-
+app.use('/api', apiRouter);
 
 // Health check
 app.get('/', (_req, res) => {

@@ -27,11 +27,9 @@ export const connectDatabase = async (): Promise<void> => {
     await sequelize.authenticate()
     logger.info('✅ Database connection established successfully.')
 
-    // Only sync in development with force option to recreate tables
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ force: true }) // This will drop and recreate all tables
-      logger.info('✅ Database models synchronized.')
-    }
+    // Sync database models without dropping tables
+    await sequelize.sync({ alter: true }) // This will update tables to match models without losing data
+    logger.info('✅ Database models synchronized.')
   } catch (error) {
     logger.error('❌ Unable to connect to the database:', error)
     throw error

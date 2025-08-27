@@ -15,7 +15,6 @@ export class AuthService {
 
     // Create player (password will be auto-hashed by model hook)
     const player = await Player.create({
-      game_id: playerData.gameId,
       name: playerData.name,
       email: playerData.email,
       password: playerData.password
@@ -95,7 +94,9 @@ export class AuthService {
   }
 
   async getCurrentUser(playerId: string): Promise<PlayerResponseDto> {
-    const player = await Player.findByPk(playerId);
+    const player = await Player.findOne({
+      where: { id: playerId }
+    });
     if (!player) {
       throw createError(404, 'Player not found');
     }

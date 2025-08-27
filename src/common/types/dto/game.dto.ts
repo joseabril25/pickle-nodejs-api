@@ -46,6 +46,28 @@ export class UpdateGameDto {
   description?: string
 }
 
+export class GamePlayerResponseDto {
+  @Expose()
+  id!: string
+
+  @Expose()
+  name!: string
+
+  @Expose()
+  email!: string
+
+  @Expose()
+  status?: string
+
+  @Expose()
+  @Type(() => Date)
+  createdAt!: Date
+
+  @Expose()
+  @Type(() => Date)
+  updatedAt!: Date
+}
+
 export class GameResponseDto extends BaseResponseDto {
   @Expose()
   title!: string
@@ -59,4 +81,8 @@ export class GameResponseDto extends BaseResponseDto {
 
   @Expose()
   description?: string
+
+  @Expose()
+  @Type(() => GamePlayerResponseDto)
+  players?: GamePlayerResponseDto[]
 }
