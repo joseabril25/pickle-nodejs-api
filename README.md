@@ -294,6 +294,31 @@ Common HTTP status codes:
 - Input validation on all endpoints
 - SQL injection protection via Sequelize ORM
 
+## Deployment
+
+### Production Deployment with Traefik
+
+For production deployment with Traefik reverse proxy:
+
+1. **Use the production docker-compose file**:
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+2. **Update Traefik labels** in `docker-compose.prod.yml`:
+- Replace `your.domain.com` with your actual domain
+- Ensure Traefik network (`proxy`) exists on your server
+
+3. **Environment variables**:
+- Copy `.env.example` to `.env`
+- Update production values (especially JWT secrets)
+
+The production setup includes:
+- PostgreSQL database (containerized)
+- Automatic SSL/TLS via Traefik
+- Health checks and auto-restart
+- Persistent data volumes
+
 ## Contributing
 
 1. Fork the repository
@@ -351,5 +376,5 @@ I will create a service to send email invites to players when they are invited t
 2. **No tests** - Would add comprehensive Jest test suites
 3. **No caching** - Would add Redis for session and query caching
 4. **Basic validation** - Would add business rules (max players, time conflicts)
-5. **No API docs** - Would add Swagger/OpenAPI documentation
+5. **No API docs** - Would add Swagger/OpenAPI documentation, I included a postman collection though
 6. **Simple error handling** - Would implement detailed error codes and logging
