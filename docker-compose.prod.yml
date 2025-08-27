@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  pickleball-db:
+    image: postgres:15-alpine
+    container_name: pickleball_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pickleball_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pickleball-api:
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pickleball-api.entrypoints=http'
+      # Replace with your actual domain
+      - 'traefik.http.routers.pickleball-api.rule=Host(`pickle.joseabriljr.dev`)'
+      - 'traefik.http.middlewares.pickleball-api-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.pickleball-api.middlewares=pickleball-api-https-redirect'
+      - 'traefik.http.routers.pickleball-api-secure.entrypoints=https'
+      # Replace with your actual domain
+      - 'traefik.http.routers.pickleball-api-secure.rule=Host(`pickle.joseabriljr.dev`)'
+      - 'traefik.http.routers.pickleball-api-secure.tls=true'
+      - 'traefik.http.routers.pickleball-api-secure.tls.certresolver=http'
+      - 'traefik.http.routers.pickleball-api-secure.service=pickleball-api'
+      - 'traefik.http.services.pickleball-api.loadbalancer.server.port=3008'
+      - 'traefik.docker.network=proxy'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pickleball_api
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DB_HOST: pickleball-db
+      PORT: 3008
+    depends_on:
+      pickleball-db:
+        condition: service_healthy
+    networks:
+      - proxy
+      - pickleball_network
+    command: npm run start
+
+volumes:
+  postgres_data:
+
+networks:
+  proxy:
+    external: true
+  pickleball_network:
+    driver: bridge
